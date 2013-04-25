@@ -1,0 +1,32 @@
+#:kivy 1.4.0
+
+<MMAMobileUI>:
+    BoxLayout:
+        orientation: "vertical"
+        size: root.size
+        pos: root.pos
+
+        FileChooserListView:
+            id: file_chooser
+            filters: ['*.mma', '*.mid', '*.midi']
+            path: "./"
+            on_selection: file_edit.text = root.file_content(self.selection[0]) if self.selection else ''
+
+        TextInput:
+            id: file_edit
+
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: (1, None)
+            height: 40
+
+            Button:
+                text: "Play"
+                on_release: root.play_pause(file_chooser.selection[0])
+
+            Button:
+                text: "Stop"
+                on_release: root.stop()
+
+            Button:
+                text: "Edit"
