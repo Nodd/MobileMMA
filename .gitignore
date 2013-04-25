@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+*.mid
+*~
+cp-install
+ln-install
+mma-gb
+mma-libdoc
