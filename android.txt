@@ -1,0 +1,3 @@
+title=MMAMobile
+author=Joseph Martinot-Lagarde
+orientation=portrait
