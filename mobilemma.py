@@ -10,7 +10,7 @@ from kivy.uix.widget import Widget
 import midi
 
 
-class MMAMobileUI(Widget):
+class MobileMMAUI(Widget):
     def play_pause(self, filename):
         """Play the selected filename.
         """
@@ -30,10 +30,10 @@ class MMAMobileUI(Widget):
         return text
 
 
-class MMAMobileApp(App):
+class MobileMMAApp(App):
     def build(self):
-        return MMAMobileUI()
+        return MobileMMAUI()
 
 
 if __name__ == '__main__':
-    MMAMobileApp().run()
+    MobileMMAApp().run()
