@@ -1,6 +1,7 @@
 #:kivy 1.4.0
 
 <MobileMMAUI>:
+    file_edit: file_edit
     BoxLayout:
         orientation: "vertical"
         size: root.size
@@ -22,7 +23,7 @@
 
             Button:
                 text: "Play"
-                on_release: root.play_pause(file_chooser.selection[0])
+                on_release: root.play_pause(file_chooser.selection and file_chooser.selection[0] or "")
 
             Button:
                 text: "Stop"
