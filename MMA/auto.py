@@ -178,7 +178,7 @@ def libUpdate():
                             dprinted=1
                     if dprinted:
                         break
-                        
+
     print
     print "Database update complete."
     print "     Files processed: %s" % fileCount
@@ -244,11 +244,11 @@ def findGroove(targ):
             grooveDB = [['', {}]]
 
 
-    # Check for extended notation. This is [DIR/DIR][FILE]:GROOVE 
+    # Check for extended notation. This is [DIR/DIR][FILE]:GROOVE
 
-    # Split the filename from the groove name. 
+    # Split the filename from the groove name.
     # The complete spec for a groove name is dir/subdir/file:groove
- 
+
 
     if ':' in targ:
         dirfile, targ = targ.split(':', 1)
@@ -276,7 +276,7 @@ def findGroove(targ):
             ret = ( dirfile, targ )
 
     else:
-        # Just lookup a normal groove load from a file. We scan 
+        # Just lookup a normal groove load from a file. We scan
         # the database and search for the groove name (targ).
 
         # Note the way we jump out the doubly nested loop. Yes, this is
@@ -290,6 +290,7 @@ def findGroove(targ):
                         raise StopIteration
 
         except StopIteration:
+            print dir, filename
             ret = ( os.path.join(dir, filename), targ.upper() )
 
     return ret

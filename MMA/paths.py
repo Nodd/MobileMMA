@@ -74,7 +74,7 @@ def mmastart(ln):
 
 def mmaend(ln):
     """ Set/append to the mmaend list. """
-    
+
     if not ln:
         error ("Use: MMAend FILE [file...]")
 
@@ -155,6 +155,7 @@ def expandLib():
                     if scount == 1:
                         libDirs.insert(0, root)
                         continue
+                print root
                 libDirs.append(root)
 
     if scount > 1:
@@ -205,7 +206,7 @@ def setOutPath(ln):
 
 def createOutfileName(extension):
    """ Create the output filename.
-    
+
        Called from the mainline, below and from lyrics karmode.
 
        If outfile was specified on cmd line then leave it alone.
@@ -213,7 +214,7 @@ def createOutfileName(extension):
          1. strip off the extension if it is .mma,
          2. append .mid
    """
-   
+
    global outfile
 
    if gbl.playFile and gbl.outfile:

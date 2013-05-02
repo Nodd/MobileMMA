@@ -169,6 +169,8 @@ def parse(inpath):
 
         # If the command is in the simple function table, jump & loop.
 
+        print action, l
+
         if action in simpleFuncs:
             simpleFuncs[action](l[1:])
             continue
@@ -226,7 +228,7 @@ def parse(inpath):
         else:
             rptcount = 1
 
- 
+
 
         """ Extract solo(s) from line ... this is anything in {}s.
             The solo data is pushed into RIFFs and discarded from
@@ -293,7 +295,7 @@ def parse(inpath):
                 This applies especially to chords. If the track class changes
                 the chord, then the function called MUST restore it before returning!!!
             """
-            
+
             for a in gbl.tnames.values():
                 if rsq >= 0:
                     seqSave = gbl.seqCount
@@ -690,7 +692,7 @@ def include(ln):
         error("Use: Include FILE" )
 
     fn = MMA.paths.findIncFile(ln[0])
- 
+
     if not fn:
         error("Could not find include file '%s'" % ln[0])
 
@@ -1303,7 +1305,7 @@ def trackHarmonyOnly(name, ln):
 
     if not ln:
         error("Use: %s HarmonyOnly N [...]" % name)
-    
+
     MMA.harmony.setHarmonyOnly(gbl.tnames[name], ln)
 #      gbl.tnames[name].setHarmonyOnly(ln)
 
@@ -1327,9 +1329,9 @@ def trackPlectrumTuning(name, ln):
 
     if not ln:
         error("Use: %s Tuning string1 string2 string3 [stringN ...]" % name)
-    
+
     g=gbl.tnames[name]
-    
+
     if hasattr(g, "setPlectrumTuning" ):
         g.setPlectrumTuning(ln)
     else:
@@ -1345,7 +1347,7 @@ def trackPlectrumCapo(name, ln):
 
     if not ln or len(ln) != 1:
         error("Use: %s Capo N" % name)
-  
+
     g=gbl.tnames[name]
     if hasattr(g, "setPlectrumCapo"):
         g.setPlectrumCapo(ln[0])
@@ -1435,7 +1437,7 @@ def trackArpeggiate(name, ln):
 
     if not ln:
         error("Use: %s Arpeggiate N" % name)
-  
+
     g=gbl.tnames[name]
     if hasattr(g, "setArp"):
         g.setArp(ln)
@@ -1448,7 +1450,7 @@ def trackStretch(name, ln):
 
     if not ln:
         error("Use: %s Stretch N" % name)
-  
+
     g=gbl.tnames[name]
     if hasattr(g, "setStretch"):
         g.setStretch(ln)
@@ -1462,7 +1464,7 @@ def trackDelay(name, ln):
 
     if not ln:
         error("Use: %s Delay N" % name)
-  
+
     g=gbl.tnames[name].setDelay(ln)
 
 
