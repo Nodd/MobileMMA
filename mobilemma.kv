@@ -1,4 +1,5 @@
 #:kivy 1.4.0
+#:import MMALexer mmalexer.MMALexer
 
 <MobileMMAUI>:
     file_edit: file_edit
@@ -13,8 +14,9 @@
             path: "./"
             on_selection: file_edit.text = root.file_content(self.selection[0]) if self.selection else ''
 
-        TextInput:
+        CodeInput:
             id: file_edit
+            lexer: MMALexer()
 
         BoxLayout:
             orientation: "horizontal"
