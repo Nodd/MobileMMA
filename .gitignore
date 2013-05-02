@@ -6,3 +6,7 @@ cp-install
 ln-install
 mma-gb
 mma-libdoc
+.mmaDB
+activity.log
+*#
+
