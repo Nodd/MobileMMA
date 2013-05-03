@@ -28,15 +28,15 @@ MMA_PATH = os.path.dirname(MMA_EXECFILE)
 sys.path.insert(0, MMA_DIR)
 logging.debug("Added %s to sys.path" % MMA_DIR)
 
+global MMA
 import MMA
-global MMA_main, MMA_gbl, MMA_grooves
-MMA_main = MMA_gbl = MMA_grooves = None
 
 
 def mma_run(*opts):
     """Run mma with the given commandline options
     """
-    global MMA_main, MMA_gbl, MMA_grooves
+    # Why does it needs to be global ?
+    global MMA
 
     # Send a fake sys.argv to MMA
     sys.argv = [MMA_EXECFILE] + list(opts)
@@ -51,20 +51,16 @@ def mma_run(*opts):
             # Reset mma if already run
             # Fails with "TypeError: reload() argument must be module" if modules
             # were not imported
-            reload(MMA_gbl)
-            reload(MMA_grooves)
+            reload(MMA.gbl)
+            reload(MMA.grooves)
 
             # Relaunch mma
-            reload(MMA_main)
-        except TypeError as err:
+            reload(MMA.main)
+        except AttributeError as err:
             logger.exception(err)
             # Run MMA for the first time
             import MMA.main
 
-            # remember modules to rerun
-            MMA_main = MMA.main
-            MMA_gbl = MMA.gbl
-            MMA_grooves = MMA.grooves
     finally:
         # Back to the previous working dir
         logger.debug("cd back to %s" % (current_dir))
