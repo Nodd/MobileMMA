@@ -9,7 +9,15 @@ Created on Sat Jan 19 14:57:57 2013
 
 from pygments.lexer import RegexLexer
 from pygments.token import *
-import re
+
+from MMA.chordtable import chordlist
+# Get the chords, join them as a OR regexp and remove leading and trailing
+# string marks.
+chords = repr('|'.join(sorted(chordlist.iterkeys()))).strip("'")
+# Escape problematic chars in chords
+for char in "+#()":
+    chords = chords.replace(char,'\\' + char)
+
 
 class MMALexer(RegexLexer):
     """A lexer corresponding to MMA files.
@@ -56,6 +64,6 @@ class MMALexer(RegexLexer):
              Name.Builtin),
             (r'[*]', Operator),
             (r'[{}]', Punctuation),
-            (r'\b(/|z|[A-G][b#]?[mM]?(6|M?7|b?9|dim|[+])*)\b', Name.Entity),
+            (r'\b/|z|[A-G][b#]?(' + chords + r')?\b', Name.Entity),
         ]
     }
