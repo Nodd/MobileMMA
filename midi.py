@@ -90,8 +90,8 @@ def build(filename_mma):
 
         # Generate the midi file
         #    quote pythonPath to handle correctly space characters in it
-        sys.argv = [MMA_EXECFILE, '-d', filename_mma]
-        logger.debug("Launching MMA : %s -d %s" % (MMA_EXECFILE, filename_mma))
+        sys.argv = [MMA_EXECFILE, filename_mma]
+        logger.debug("Launching MMA : %s %s" % (MMA_EXECFILE, filename_mma))
 #        if MMA_main is None:
 #            import MMA.main
 #            MMA_main = MMA.main
