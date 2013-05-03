@@ -62,7 +62,7 @@ def mma_run(*opts):
             # Run MMA for the first time
             import MMA.main
 
-            # rememmer modules to rerun
+            # remember modules to rerun
             MMA_main = MMA.main
             MMA_gbl = MMA.gbl
             MMA_grooves = MMA.grooves
