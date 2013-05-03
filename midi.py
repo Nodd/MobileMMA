@@ -90,7 +90,6 @@ def build(filename_mma):
     Even if MMA is written in python, it is sadly far easier to run in with
     popen().
     """
-    global MMA_main, MMA_gbl, MMA_grooves
     assert filename_mma.lower().endswith(".mma")
     assert os.path.isfile(filename_mma)
     assert os.access(filename_mma, os.R_OK)
@@ -104,7 +103,6 @@ def build(filename_mma):
         logger.debug("Removed %s" % filename_midi)
     except Exception:
         logger.debug("No midi file to remove")
-        pass
 
     logger.debug("Building midifile from %s to %s..." %
                  (filename_mma, filename_midi))
