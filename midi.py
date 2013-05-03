@@ -73,14 +73,17 @@ def update_grooves():
     """
     logger.debug("Updating grooves...")
     try:
-        mma_run('-g')
+        try:
+            mma_run('-g')
+        except ImportError:
+            mma_run('-G')
+    except SystemExit:
+        # MMA closes after update with sys.exit(0)
+        logger.debug("Grooves updated")
     except Exception as err:
         logger.error("Error running MMA")
         logger.exception(err)
         raise
-    except SystemExit:
-        # MMA closes after update with sys.exit(0)
-        logger.debug("Grooves updated")
 
 
 def build(filename_mma):
