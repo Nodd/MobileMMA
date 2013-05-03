@@ -36,8 +36,15 @@ class StreamToLogger(object):
         self.linebuf = ''
 
     def write(self, buf):
+        # Log buffer
         for line in buf.rstrip().splitlines():
             self.logger.log(self.log_level, line.rstrip())
+
+        # Print to console
+        if self.log_level == logging.INFO:
+            sys.__stdout__.write(buf)
+        elif self.log_level == logging.INFO:
+            sys.__stderr__.write(buf)
 
 sys.stdout = StreamToLogger(logging.getLogger('STDOUT'), logging.INFO)
 sys.stderr = StreamToLogger(logging.getLogger('STDERR'), logging.ERROR)
