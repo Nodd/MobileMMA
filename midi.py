@@ -73,7 +73,7 @@ def init():
     """
     logger.debug("Updating grooves...")
     try:
-        mma_run('-G')
+        mma_run('-g')
     except Exception as err:
         logger.error("Error running MMA")
         logger.exception(err)
