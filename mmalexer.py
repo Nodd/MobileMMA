@@ -34,6 +34,7 @@ class MMALexer(RegexLexer):
     tokens = {
         'root': [
             (r'//.*\n', Comment.Single),
+            (r'^\d+\b', Comment),
             # Taken from mma -Dk
             # (?i) is for case insensitive
             (r'(?i)\b(ADJUSTVOLUME|ALLGROOVES|ALLTRACKS|AUTHOR|AUTOSOLOTRACKS|'
