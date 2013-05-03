@@ -34,6 +34,44 @@ global MMA_main, MMA_gbl, MMA_grooves
 MMA_main = MMA_gbl = MMA_grooves = None
 
 
+def mma_run(*opts):
+    """Run mma with the given commandline options
+    """
+    global MMA_main, MMA_gbl, MMA_grooves
+
+    # Send a fake sys.argv to MMA
+    sys.argv = [MMA_EXECFILE] + list(opts)
+    logger.debug("Launching MMA : '%s'" % " ".join(sys.argv))
+
+    # Call MMA via imports (MMA must run from MMA_PATH)
+    current_dir = os.getcwd()
+    os.chdir(MMA_PATH)
+    logger.debug("cd from %s to %s" % (current_dir, MMA_PATH))
+    try:
+        try:
+            # Reset mma if already run
+            # Fails with "TypeError: reload() argument must be module" if modules
+            # were not imported
+            reload(MMA_gbl)
+            reload(MMA_grooves)
+
+            # Relaunch mma
+            reload(MMA_main)
+        except TypeError as err:
+            logger.exception(err)
+            # Run MMA for the first time
+            import MMA.main
+
+            # rememmer modules to rerun
+            MMA_main = MMA.main
+            MMA_gbl = MMA.gbl
+            MMA_grooves = MMA.grooves
+    finally:
+        # Back to the previous working dir
+        logger.debug("cd back to %s" % (current_dir))
+        os.chdir(current_dir)
+
+
 def init():
     """Initialise MMA with grooves
     """
@@ -73,48 +111,22 @@ def build(filename_mma):
     filename_mma = os.path.abspath(filename_mma).encode("utf8")
 
     filename_midi = filename_mma[:-4] + ".mid"
-    logger.debug("Building midifile from %s to %s" %
-                 (filename_mma, filename_midi))
-
-    # MMA must run from mma.py path
-    current_dir = os.getcwd()
-    os.chdir(MMA_PATH)
-    logger.debug("cd from %s to %s" % (current_dir, MMA_PATH))
     try:
-        try:
-            os.remove(filename_midi)
-            logger.debug("Removed %s" % filename_midi)
-        except Exception:
-            logger.debug("No midi file to remove")
-            pass
+        os.remove(filename_midi)
+        logger.debug("Removed %s" % filename_midi)
+    except Exception:
+        logger.debug("No midi file to remove")
+        pass
 
-        # Generate the midi file
-        #    quote pythonPath to handle correctly space characters in it
-        sys.argv = [MMA_EXECFILE, filename_mma]
-        logger.debug("Launching MMA : %s %s" % (MMA_EXECFILE, filename_mma))
-#        if MMA_main is None:
-#            import MMA.main
-#            MMA_main = MMA.main
-#        else:
-#            MMA.main = reload(MMA.main)
-        try:
-            reload(MMA_gbl)
-            reload(MMA_grooves)
-            reload(MMA_main)
-        except (AttributeError, UnboundLocalError, TypeError) as err:
-            logger.exception(err)
-            import MMA.main
-            MMA_main = MMA.main
-            MMA_gbl = MMA.gbl
-            MMA_grooves = MMA.grooves
+    logger.debug("Building midifile from %s to %s..." %
+                 (filename_mma, filename_midi))
+    try:
+        # Generate the midi file with MMA
+        mma_run(filename_mma)
     except Exception as err:
         logger.error("Error running MMA")
         logger.exception(err)
         raise
-    finally:
-        # Back to the previous working dir
-        logger.debug("cd back to %s" % (current_dir))
-        os.chdir(current_dir)
 
     return filename_midi
 
