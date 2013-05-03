@@ -16,7 +16,7 @@ from MMA.chordtable import chordlist
 chords = repr('|'.join(sorted(chordlist.iterkeys()))).strip("'")
 # Escape problematic chars in chords
 for char in "+#()":
-    chords = chords.replace(char,'\\' + char)
+    chords = chords.replace(char, '\\' + char)
 
 
 class MMALexer(RegexLexer):
