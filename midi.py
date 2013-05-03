@@ -70,24 +70,16 @@ def mma_run(*opts):
 def init():
     """Initialise MMA with grooves
     """
-    current_dir = os.getcwd()
-    os.chdir(MMA_PATH)
-    logger.debug("cd from %s to %s" % (current_dir, MMA_PATH))
+    logger.debug("Updating grooves...")
     try:
-        sys.argv = [MMA_EXECFILE, '-G']
-        logger.debug("Updating grooves...")
-        import MMA.main
+        mma_run('-G')
     except Exception as err:
         logger.error("Error running MMA")
         logger.exception(err)
         raise
-#    except SystemExit:
-#        # MMA closes after update with sys.exit(0)
-#        logger.debug("Grooves updated")
-    finally:
-        # Back to the previous working dir
-        logger.debug("cd back to %s" % (current_dir))
-        os.chdir(current_dir)
+    except SystemExit:
+        # MMA closes after update with sys.exit(0)
+        logger.debug("Grooves updated")
 
 
 def build(filename_mma):
