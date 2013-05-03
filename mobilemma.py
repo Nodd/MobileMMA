@@ -72,11 +72,26 @@ class MobileMMAUI(Widget):
         except Exception as err:
             logger.exception(err)
 
+        self.refresh_current_path()
+
     def stop(self):
         """Stop playing.
         """
         logger.debug("Stop button pressed")
         midi.stop()
+
+        # Not needed but refreshing from time to time is good
+        self.refresh_current_path()
+
+    def refresh_current_path(self):
+        """Refreshes list of files in path by changing temporarily the current
+        path.
+
+        Not very beautiful code but no kivy method does it.
+        """
+        path = self.file_chooser.path
+        self.file_chooser.path = "/"
+        self.file_chooser.path = path
 
     def file_content(self, filename):
         """Return content of a mma test file.
