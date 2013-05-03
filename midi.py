@@ -68,7 +68,7 @@ def mma_run(*opts):
         os.chdir(current_dir)
 
 
-def init():
+def update_grooves():
     """Initialise MMA with grooves
     """
     logger.debug("Updating grooves...")
