@@ -52,6 +52,7 @@ def mma_run(*opts):
             # Fails with "TypeError: reload() argument must be module" if modules
             # were not imported
             reload(MMA.gbl)
+            reload(MMA.auto)
             reload(MMA.grooves)
 
             # Relaunch mma
