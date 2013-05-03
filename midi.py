@@ -22,7 +22,6 @@ mixer.music.set_volume(1.0)
 
 #from kivy.core.audio import SoundLoader
 
-PYTHON = sys.executable
 MMA_DIR = os.path.dirname(__file__)
 MMA_EXECFILE = os.path.join(MMA_DIR, "mma.py")
 MMA_PATH = os.path.dirname(MMA_EXECFILE)
