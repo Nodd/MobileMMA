@@ -64,6 +64,6 @@ class MMALexer(RegexLexer):
              Name.Builtin),
             (r'[*]', Operator),
             (r'[{}]', Punctuation),
-            (r'\b/|z|[A-G][b#]?(' + chords + r')?\b', Name.Entity),
+            (r'\b(/|z|[A-G][b#]?(' + chords + r')?)\b', Name.Entity),
         ]
     }
