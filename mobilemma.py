@@ -57,6 +57,12 @@ import midi
 
 
 class MobileMMAUI(Widget):
+    def __init__(self, *args, **kwargs):
+        Widget.__init__(self, *args, **kwargs)
+
+        # Update grooves at startup
+        midi.update_grooves()
+
     def play_pause(self, filename):
         """Play the selected filename.
         """
