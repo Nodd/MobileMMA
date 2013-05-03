@@ -98,13 +98,18 @@ def build(filename_mma):
 
     # The working diretory will be temporarilly changed
     filename_mma = os.path.abspath(filename_mma).encode("utf8")
-
     filename_midi = filename_mma[:-4] + ".mid"
-    try:
-        os.remove(filename_midi)
-        logger.debug("Removed %s" % filename_midi)
-    except Exception:
-        logger.debug("No midi file to remove")
+
+    # Manage existing midi file
+    if os.path.isfile(filename_midi):
+        if os.path.getmtime(filename_midi) < os.path.getmtime(filename_mma):
+            logger.debug("Midi file exists but is too old, removing...")
+            os.remove(filename_midi)
+        else:
+            logger.debug("Midi file exists and is already up to date")
+            return filename_midi
+    else:
+        logger.debug("Midi file doesn't exist yet")
 
     logger.debug("Building midifile from %s to %s..." %
                  (filename_mma, filename_midi))
