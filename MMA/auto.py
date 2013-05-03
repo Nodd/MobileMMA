@@ -290,7 +290,6 @@ def findGroove(targ):
                         raise StopIteration
 
         except StopIteration:
-            print dir, filename
             ret = ( os.path.join(dir, filename), targ.upper() )
 
     return ret

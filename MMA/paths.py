@@ -155,7 +155,6 @@ def expandLib():
                     if scount == 1:
                         libDirs.insert(0, root)
                         continue
-                print root
                 libDirs.append(root)
 
     if scount > 1:

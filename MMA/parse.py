@@ -169,8 +169,6 @@ def parse(inpath):
 
         # If the command is in the simple function table, jump & loop.
 
-        print action, l
-
         if action in simpleFuncs:
             simpleFuncs[action](l[1:])
             continue
