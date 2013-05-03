@@ -57,8 +57,7 @@ def mma_run(*opts):
 
             # Relaunch mma
             reload(MMA.main)
-        except AttributeError as err:
-            logger.exception(err)
+        except AttributeError:
             # Run MMA for the first time
             import MMA.main
 
