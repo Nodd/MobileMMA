@@ -15,7 +15,7 @@ def search_info(filename, label):
         return []
 
     logger.debug("Looking for " + label + " in " + filename)
-    values = []
+    values = set()
     with open(filename, 'rt') as fid:
         for line in fid:
             # remove comments and unused whitespaces
@@ -24,6 +24,6 @@ def search_info(filename, label):
                 continue
 
             if line.lower().startswith(label.lower()):
-                values.append(line.strip()[len(label):].lstrip())
+                values.add(line.strip()[len(label):].lstrip())
     logger.debug("Found : " + ", ".join(values))
-    return values
+    return sorted(values)
