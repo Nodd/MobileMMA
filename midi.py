@@ -116,6 +116,11 @@ def build(filename_mma):
     try:
         # Generate the midi file with MMA
         mma_run(filename_mma)
+    except SystemExit as err:
+        logger.error("Error running MMA")
+        logger.exception(err)
+        raise RuntimeError(err)
+
     except Exception as err:
         logger.error("Error running MMA")
         logger.exception(err)
