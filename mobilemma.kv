@@ -2,8 +2,14 @@
 #:import MMALexer mmalexer.MMALexer
 
 <MobileMMAUI>:
+    # ids as properties so that the can be used in python code
     file_edit: file_edit
     file_chooser: file_chooser
+    label_name: label_name
+    label_tempo: label_tempo
+    label_key: label_key
+    label_groove: label_groove
+
     BoxLayout:
         orientation: "vertical"
         size: root.size
@@ -13,7 +19,20 @@
             id: file_chooser
             filters: ['*.mma', '*.mid', '*.midi']
             path: "./"
-            on_selection: file_edit.text = root.file_content(self.selection[0]) if self.selection else ''
+            on_selection: root.update_file_info(file_chooser.selection and file_chooser.selection[0] or "")
+
+        BoxLayout:
+            Label:
+                id: label_name
+
+            Label:
+                id: label_tempo
+
+            Label:
+                id: label_key
+
+            Label:
+                id: label_groove
 
         CodeInput:
             id: file_edit

@@ -3,7 +3,7 @@
 from __future__ import division, print_function, unicode_literals
 """
 """
-
+import os
 import sys
 import logging
 # création de l'objet logger qui va nous servir à écrire dans les logs
@@ -54,6 +54,7 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 
 import midi
+from mma import search_info
 
 
 class MobileMMAUI(Widget):
@@ -104,6 +105,25 @@ class MobileMMAUI(Widget):
         with open(filename, "rt") as fid:
             text = fid.read()
         return text
+
+    def update_file_info(self, filename):
+        """Fills the information panel with infos from the selected file
+        """
+        if not filename:
+            self.label_name.text = ""
+            self.label_tempo.text = ""
+            self.label_key.text = ""
+            self.label_groove.text = ""
+            self.file_edit.text = ""
+            return
+
+        self.label_name.text = "File name:\n" + os.path.basename(filename)
+        self.label_tempo.text = "Tempo:\n" + "\n".join(search_info(filename, "Tempo"))
+
+        key = search_info(filename, "KeySig") or ["C"]
+        self.label_key.text = "Key:\n" + "\n".join(key)
+        self.label_groove.text = "Groove:\n" + "\n".join(search_info(filename, "Groove"))
+        self.file_edit.text = self.file_content(filename)
 
     def update_grooves(self):
         midi.init()
