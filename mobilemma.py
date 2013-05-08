@@ -43,7 +43,7 @@ class StreamToLogger(object):
         # Print to console
         if self.log_level == logging.INFO:
             sys.__stdout__.write(buf)
-        elif self.log_level == logging.INFO:
+        elif self.log_level == logging.ERROR:
             sys.__stderr__.write(buf)
 
 sys.stdout = StreamToLogger(logging.getLogger('STDOUT'), logging.INFO)
