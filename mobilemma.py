@@ -118,11 +118,13 @@ class MobileMMAUI(Widget):
             return
 
         self.label_name.text = "File name:\n" + os.path.basename(filename)
-        self.label_tempo.text = "Tempo:\n" + "\n".join(search_info(filename, "Tempo"))
+        self.label_tempo.text = "Tempo:\n" + "\n".join(search_info(filename,
+                                                                   "Tempo"))
 
         key = search_info(filename, "KeySig") or ["C"]
         self.label_key.text = "Key:\n" + "\n".join(key)
-        self.label_groove.text = "Groove:\n" + "\n".join(search_info(filename, "Groove"))
+        self.label_groove.text = "Groove:\n" + "\n".join(search_info(filename,
+                                                                     "Groove"))
         self.file_edit.text = self.file_content(filename)
 
     def update_grooves(self):
