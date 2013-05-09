@@ -52,12 +52,18 @@ sys.stderr = StreamToLogger(logging.getLogger('STDERR'), logging.ERROR)
 
 from kivy.app import App
 from kivy.uix.widget import Widget
+from kivy.config import ConfigParser
 
 import midi
 from mma import search_info
 
+CONFIG_FILENAME = "mobilemma.ini"
+
 
 class MobileMMAUI(Widget):
+    config = ConfigParser()
+    config.read(CONFIG_FILENAME)
+
     def __init__(self, *args, **kwargs):
         Widget.__init__(self, *args, **kwargs)
 
@@ -132,6 +138,17 @@ class MobileMMAUI(Widget):
 
 
 class MobileMMAApp(App):
+    use_kivy_settings = False
+
+    def build_config(self, config):
+        config.setdefaults('Library', {
+            'library_path': './'
+        })
+
+    def build_settings(self, settings):
+        settings.add_json_panel('Library', self.config,
+                                'settings_library.json')
+
     def build(self):
         logger.debug("Create Kivy UI")
         return MobileMMAUI()

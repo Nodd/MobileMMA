@@ -1,0 +1,8 @@
+[
+    { "type": "path",
+      "title": "Library path",
+      "desc": "Directory containing MMA files. It will be recursively searched at startup.",
+      "section": "Library",
+      "key": "library_path"
+    }
+]

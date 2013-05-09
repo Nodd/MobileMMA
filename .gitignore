@@ -3,6 +3,7 @@
 *.swp
 *.mid
 *~
+*.ini
 cp-install
 ln-install
 mma-gb
