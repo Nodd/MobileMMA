@@ -3,40 +3,122 @@
 
 <MobileMMAUI>:
     # ids as properties so that they can be used in python code
-    file_edit: file_edit
-    file_chooser: file_chooser
-    label_name: label_name
-    label_tempo: label_tempo
-    label_key: label_key
-    label_groove: label_groove
+    buttons_key: buttons_key
+    groove_list: groove_list
+    tune_list: tune_list
 
     BoxLayout:
         orientation: "vertical"
         size: root.size
         pos: root.pos
 
-        FileChooserListView:
-            id: file_chooser
-            filters: ['*.mma', '*.mid', '*.midi']
-            path: "./"
-            on_selection: root.update_file_info(file_chooser.selection and file_chooser.selection[0] or "")
+        Accordion:
+            AccordionItem:
+                title: "Key"
 
-        BoxLayout:
-            Label:
-                id: label_name
+                BoxLayout:
+                    orientation: "vertical"
 
-            Label:
-                id: label_tempo
+                    BoxLayout:
+                        orientation: "horizontal"
+                        size_hint_y: None
+                        height: 40
 
-            Label:
-                id: label_key
+                        Button:
+                            text: "All"
+                            on_press:
+                                for note in buttons_key.children: note.state = 'down'
 
-            Label:
-                id: label_groove
+                        Button:
+                            text: "None"
+                            on_press:
+                                for note in buttons_key.children: note.state = 'normal'
 
-        CodeInput:
-            id: file_edit
-            lexer: MMALexer()
+                    GridLayout:
+                        id: buttons_key
+                        cols: 4
+                        # b musical symbol : ♭ = \u266D
+
+                        ToggleButton:
+                            text: "C"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: u"C# / Db"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "D"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "D# / Eb"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "E"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "F"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "F# / Gb"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "G"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "G# / Ab"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "A"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "A# / Bb"
+                            state: 'down'
+
+                        ToggleButton:
+                            text: "B"
+                            state: 'down'
+
+            AccordionItem:
+                title: "Groove"
+
+                BoxLayout:
+                    orientation: "vertical"
+
+                    BoxLayout:
+                        orientation: "horizontal"
+                        size_hint_y: None
+                        height: 40
+
+                        Button:
+                            text: "All"
+                            on_press:
+                                for groove in groove_list.children: groove.state = 'down'
+
+                        Button:
+                            text: "None"
+                            on_press:
+                                for groove in groove_list.children: groove.state = 'normal'
+
+                    ListView:
+                        id: groove_list
+
+            AccordionItem:
+                title: "Filters"
+
+                BoxLayout:
+                    orientation: "vertical"
+
+        ListView:
+            id: tune_list
 
         BoxLayout:
             orientation: "horizontal"
