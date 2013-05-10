@@ -23,18 +23,20 @@ def search_info(filename, label):
         logger.debug("Not a MMA file")
         return []
 
-    logger.debug("Looking for " + label + " in " + filename)
     values = set()
-    with open(filename, 'rt') as fid:
-        for line in fid:
-            # remove comments and unused whitespaces
-            line = line.split("//")[0].strip()
-            if not line:
-                continue
+    try:
+        with open(filename, 'rt') as fid:
+            for line in fid:
+                # remove comments and unused whitespaces
+                line = line.decode("utf8").split("//")[0].strip()
+                if not line:
+                    continue
 
-            if line.lower().startswith(label.lower()):
-                values.add(line.strip()[len(label):].lstrip())
-    logger.debug("Found : " + ", ".join(values))
+                if line.lower().startswith(label.lower()):
+                    values.add(line.strip()[len(label):].lstrip())
+    except Exception as err:
+        logger.info("Problem with file '%s'" % filename)
+        logger.exception(err)
     return sorted(values)
 
 
