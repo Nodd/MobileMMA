@@ -110,6 +110,8 @@
 
                     ScrollView:
                         do_scroll_x: False
+                        scroll_timeout: 250
+                        scroll_distance: 5
 
                         TreeView:
                             id: groove_tree
@@ -118,7 +120,6 @@
                             hide_root: True
                             indent_level: 32
                             indent_start: 32
-                            on_touch_move: False
 
 
             AccordionItem:
@@ -163,5 +164,3 @@
     no_selection: True
     state: 'down'
     on_state: for child in self.nodes: child.state = self.state
-    on_touch_move: False
-    on_touch_down: False
