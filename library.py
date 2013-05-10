@@ -86,6 +86,7 @@ class Library(object):
                     continue
 
                 filename = os.path.join(dirpath, filename)
+                filename_rel = os.path.relpath(filename, start=self.path)
                 file_hash = md5(filename)
 
                 if (filename not in self.files
@@ -94,7 +95,7 @@ class Library(object):
                         updated += 1
                     else:
                         added += 1
-                    self.files[filename] = FileInfo(
+                    self.files[filename_rel] = FileInfo(
                         file_hash,
                         search_info(filename, "KeySig"),
                         search_info(filename, "Tempo"),
@@ -104,7 +105,7 @@ class Library(object):
                             if not groove.startswith("$")))
 
                 # Update set of each category
-                info = self.files[filename]
+                info = self.files[filename_rel]
                 for key_sig in info.key_sig:
                     self.key_sig.add(key_sig)
                 for tempo in info.tempo:
