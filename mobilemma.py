@@ -76,7 +76,7 @@ class MobileMMAUI(Widget):
         self.mma_library = Library(library_path)
         self.mma_library.update()
 
-        #self.groove_list.item_strings = sorted(self.mma_library.groove)
+        self.key_list.adapter.data = sorted(self.mma_library.key_sig)
         self.fill_groove_tree()
 
     def play_pause(self, filename):

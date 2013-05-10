@@ -1,9 +1,11 @@
 #:kivy 1.4.0
 #:import MMALexer mmalexer.MMALexer
+#:import lv kivy.uix.listview
+#:import la kivy.adapters.listadapter
 
 <MobileMMAUI>:
     # ids as properties so that they can be used in python code
-    buttons_key: buttons_key
+    key_list: key_list
     groove_tree: groove_tree
     tune_list: tune_list
 
@@ -27,65 +29,21 @@
                         Button:
                             text: "All"
                             on_press:
-                                for note in buttons_key.children: note.state = 'down'
+                                key_list.adapter.select_list(key_list.adapter.data, extend=False)
 
                         Button:
                             text: "None"
                             on_press:
-                                for note in buttons_key.children: note.state = 'normal'
+                                key_list.adapter.select_list([], extend=False)
 
-                    GridLayout:
-                        id: buttons_key
-                        cols: 4
-                        # b musical symbol : ♭ = \u266D
-
-                        ToggleButton:
-                            text: "C"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: u"C# / Db"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "D"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "D# / Eb"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "E"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "F"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "F# / Gb"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "G"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "G# / Ab"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "A"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "A# / Bb"
-                            state: 'down'
-
-                        ToggleButton:
-                            text: "B"
-                            state: 'down'
+                    ListView:
+                        id: key_list
+                        # b musical symbol : ♭ = \u266D adapter:
+                        adapter:
+                            la.ListAdapter(
+                            data=[],
+                            selection_mode='multiple',
+                            cls=lv.ListItemButton)
 
             AccordionItem:
                 title: "Groove"
