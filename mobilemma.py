@@ -164,5 +164,3 @@ class MobileMMAApp(App):
         return MobileMMAUI(self.config.get('Library', 'library_path'))
 
 logging.debug("Module mobilemma imported")
-if __name__ == '__main__':
-    MobileMMAApp().run()
