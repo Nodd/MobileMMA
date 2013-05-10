@@ -121,4 +121,4 @@
     text_size: self.width - self.padding_x * 2, None
     no_selection: True
     state: 'down'
-    on_state: for child in self.nodes: child.state = self.state
+    on_state: app.root.toggle_groove(self)

@@ -59,6 +59,15 @@ class Library(object):
         self.time_sig = set()
         self.groove = set()
 
+    def get_match(self, grooves):
+        match = set()
+        for tune, info in self.files.iteritems():
+            for groove in info.groove:
+                if groove in grooves:
+                    match.add(tune)
+                    break
+        return match
+
     def reset(self):
         logger.debug("Reset library")
         self.files = dict()

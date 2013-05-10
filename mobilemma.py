@@ -54,6 +54,8 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.treeview import TreeViewNode
+from kivy.uix.listview import ListItemButton
+from kivy.adapters.listadapter import ListAdapter
 from kivy.config import ConfigParser
 
 import midi
@@ -78,6 +80,7 @@ class MobileMMAUI(Widget):
 
         self.key_list.adapter.data = sorted(self.mma_library.key_sig)
         self.fill_groove_tree()
+        self.update_tune_list()
 
     def play_pause(self):
         """Play the selected filename.
@@ -114,6 +117,34 @@ class MobileMMAUI(Widget):
     def fill_groove_tree(self):
         _populate_tree_view(self.groove_tree, self.groove_tree.root, None,
                             self.mma_library.groove_tree)
+
+    def toggle_groove(self, groove_item):
+        if groove_item.nodes:
+            for child in groove_item.nodes:
+                child.state = groove_item.state
+        else:
+            self.update_tune_list()
+
+    def selected_grooves(self, _tree=None):
+        # Initilaization
+        selected = set()
+        if _tree is None:
+            _tree = self.groove_tree.root
+
+        # Recursive filling
+        for groove in _tree.nodes:
+            if groove.state == 'down':
+                selected.add(groove.text)
+            selected = selected | self.selected_grooves(groove)
+        return selected
+
+    def update_tune_list(self):
+        data = sorted(self.mma_library.get_match(self.selected_grooves()))
+        self.tune_list.adapter = ListAdapter(
+            data=data,
+            selection_mode='single',
+            allow_empty_selection=False,
+            cls=ListItemButton)
 
 
 class TreeViewToggleButton(ToggleButton, TreeViewNode):
