@@ -55,6 +55,7 @@ from kivy.uix.widget import Widget
 from kivy.config import ConfigParser
 
 import midi
+from library import Library
 from mma import search_info
 
 CONFIG_FILENAME = "mobilemma.ini"
@@ -140,6 +141,11 @@ class MobileMMAUI(Widget):
 class MobileMMAApp(App):
     use_kivy_settings = False
 
+    def __init__(self, *args, **kwargs):
+        App.__init__(self, *args, **kwargs)
+
+        self.mma_library = None
+
     def build_config(self, config):
         config.setdefaults('Library', {
             'library_path': './'
@@ -151,7 +157,10 @@ class MobileMMAApp(App):
 
     def build(self):
         logger.debug("Create Kivy UI")
-        return MobileMMAUI()
+        gui = MobileMMAUI()
+        self.mma_library = Library(self.config.get('Library', 'library_path'))
+        self.mma_library.update()
+        return gui
 
 
 if __name__ == '__main__':
