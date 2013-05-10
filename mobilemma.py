@@ -79,35 +79,22 @@ class MobileMMAUI(Widget):
         self.key_list.adapter.data = sorted(self.mma_library.key_sig)
         self.fill_groove_tree()
 
-    def play_pause(self, filename):
+    def play_pause(self):
         """Play the selected filename.
         """
         logger.debug("Play button pressed")
+        filename = os.path.join(self.mma_library.path,
+                                self.tune_list.adapter.selection[0].text)
         try:
             midi.play(filename)
         except Exception as err:
             logger.exception(err)
-
-        self.refresh_current_path()
 
     def stop(self):
         """Stop playing.
         """
         logger.debug("Stop button pressed")
         midi.stop()
-
-        # Not needed but refreshing from time to time is good
-        self.refresh_current_path()
-
-    def refresh_current_path(self):
-        """Refreshes list of files in path by changing temporarily the current
-        path.
-
-        Not very beautiful code but no kivy method does it.
-        """
-        path = self.file_chooser.path
-        self.file_chooser.path = "/"
-        self.file_chooser.path = path
 
     def file_content(self, filename):
         """Return content of a mma test file.
