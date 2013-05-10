@@ -4,7 +4,7 @@
 <MobileMMAUI>:
     # ids as properties so that they can be used in python code
     buttons_key: buttons_key
-    groove_list: groove_list
+    groove_tree: groove_tree
     tune_list: tune_list
 
     BoxLayout:
@@ -101,18 +101,34 @@
                         Button:
                             text: "All"
                             on_press:
-                                for groove in groove_list.children: groove.state = 'down'
+                                for groove in groove_tree.children: groove.state = 'down'
 
                         Button:
                             text: "None"
                             on_press:
-                                for groove in groove_list.children: groove.state = 'normal'
+                                for groove in groove_tree.children: groove.state = 'normal'
 
-                    ListView:
-                        id: groove_list
+                    ScrollView:
+                        do_scroll_x: False
+
+                        TreeView:
+                            id: groove_tree
+                            size_hint_y: None
+                            height: self.minimum_height
+                            hide_root: True
+                            indent_level: 32
+                            indent_start: 32
+                            on_touch_move: False
+
 
             AccordionItem:
-                title: "Filters"
+                title: "Additional filters"
+
+                BoxLayout:
+                    orientation: "vertical"
+
+            AccordionItem:
+                title: "Options"
 
                 BoxLayout:
                     orientation: "vertical"
@@ -139,3 +155,13 @@
             Button:
                 text: "Configuration"
                 on_release:
+
+<TreeViewToggleButton>:
+    padding: 14, 10
+    height: self.texture_size[1] + self.padding_y * 2
+    text_size: self.width - self.padding_x * 2, None
+    no_selection: True
+    state: 'down'
+    on_state: for child in self.nodes: child.state = self.state
+    on_touch_move: False
+    on_touch_down: False

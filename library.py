@@ -8,6 +8,7 @@ Created on Sat Jan 19 14:57:57 2013
 from __future__ import division, print_function, unicode_literals
 
 import os
+import re
 import hashlib
 from collections import namedtuple
 import logging
@@ -46,6 +47,8 @@ def md5(filename):
 
 
 class Library(object):
+    groove_split_regexp = re.compile(r"(\-?[A-Z][a-z]+)")
+
     def __init__(self, path):
         logger.debug("Create library")
         self.path = path
@@ -96,7 +99,9 @@ class Library(object):
                         search_info(filename, "KeySig"),
                         search_info(filename, "Tempo"),
                         search_info(filename, "TimeSig"),
-                        search_info(filename, "Groove"))
+                        set(groove
+                            for groove in search_info(filename, "Groove")
+                            if not groove.startswith("$")))
 
                 # Update set of each category
                 info = self.files[filename]
@@ -109,8 +114,73 @@ class Library(object):
                 for groove in info.groove:
                     self.groove.add(groove)
 
-        logger.info(
-            "Library refreshed: %d updated, %d added and %s removed"
-            % (updated, added, removed))
+        print("Library refreshed: %d updated, %d added and %s removed"
+              % (updated, added, removed))
+
+    def groove_split(self, groove):
+        """Splits a groove name in parts.
+
+        Examples :
+
+        >>> lib = Library
+        >>> lib.groove_split("Waltz")
+        [u'Waltz']
+        >>> lib.groove_split("Waltz1")
+        [u'Waltz', u'1']
+        >>> lib.groove_split("WaltzSusIntro")
+        [u'Waltz', u'Sus', u'Intro']
+        >>> lib.groove_split("R&B-Ballad")
+        [u'R&B', u'-Ballad']
+        >>> lib.groove_split("R&BPlus")
+        [u'R&B', u'Plus']
+        >>> lib.groove_split("BWMarchPlus")
+        [u'BW', u'March', u'Plus']
+        >>> lib.groove_split("50sRock")
+        [u'50s', u'Rock']
+        >>> lib.groove_split("68March")
+        [u'68', u'March']
+        """
+        return (match.rstrip('-')
+                for match in self.groove_split_regexp.split(groove)
+                if match)
+
+    @property
+    def groove_tree(self):
+        """Builds a tree of grooves using dictionnaries.
+        """
+        logger.debug("Build groove tree")
+
+        # Build the tree
+        tree = {}
+        for groove in self.groove:
+            groove_group = ''
+            subtree = tree
+
+            for groove_part in self.groove_split(groove):
+                groove_group += groove_part
+                if groove_group not in subtree:
+                    subtree[groove_group] = {}
+                subtree = subtree[groove_group]
+            # Add the groove itself to the groove group
+            subtree[groove_group] = {}
+
+        # Recursively remove nodes with only one child
+        def _simplify(name, node):
+            # Simplify childrens
+            childnames = node.keys()
+            for childname in childnames:
+                childname_new, childnode = _simplify(childname,
+                                                     node[childname])
+                del node[childname]
+                node[childname_new] = childnode
+
+            # Simplify itself if only one element
+            if len(node) == 1:
+                return node.keys()[0], node.values()[0]
+            else:
+                return name, node
+
+        _, tree = _simplify("", tree)
+        return tree
 
 logging.debug("Module library imported")

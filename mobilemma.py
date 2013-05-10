@@ -52,24 +52,32 @@ sys.stderr = StreamToLogger(logging.getLogger('STDERR'), logging.ERROR)
 
 from kivy.app import App
 from kivy.uix.widget import Widget
+from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.treeview import TreeViewNode
 from kivy.config import ConfigParser
 
 import midi
 from library import Library
-from mma import search_info
 
-CONFIG_FILENAME = "mobilemma.ini"
+#CONFIG_FILENAME = "mobilemma.ini"
 
 
 class MobileMMAUI(Widget):
-    config = ConfigParser()
-    config.read(CONFIG_FILENAME)
+    #config = ConfigParser()
+    #config.read(CONFIG_FILENAME)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, library_path, *args, **kwargs):
         Widget.__init__(self, *args, **kwargs)
 
         # Update grooves at startup
         midi.update_grooves()
+
+        # Library od mma files
+        self.mma_library = Library(library_path)
+        self.mma_library.update()
+
+        #self.groove_list.item_strings = sorted(self.mma_library.groove)
+        self.fill_groove_tree()
 
     def play_pause(self, filename):
         """Play the selected filename.
@@ -113,38 +121,34 @@ class MobileMMAUI(Widget):
             text = fid.read()
         return text
 
-    def update_file_info(self, filename):
-        """Fills the information panel with infos from the selected file
-        """
-        if not filename:
-            self.label_name.text = ""
-            self.label_tempo.text = ""
-            self.label_key.text = ""
-            self.label_groove.text = ""
-            self.file_edit.text = ""
-            return
-
-        self.label_name.text = "File name:\n" + os.path.basename(filename)
-        self.label_tempo.text = "Tempo:\n" + "\n".join(search_info(filename,
-                                                                   "Tempo"))
-
-        key = search_info(filename, "KeySig") or ["C"]
-        self.label_key.text = "Key:\n" + "\n".join(key)
-        self.label_groove.text = "Groove:\n" + "\n".join(search_info(filename,
-                                                                     "Groove"))
-        self.file_edit.text = self.file_content(filename)
-
     def update_grooves(self):
         midi.init()
+
+    def fill_groove_tree(self):
+        _populate_tree_view(self.groove_tree, self.groove_tree.root, None,
+                            self.mma_library.groove_tree)
+
+
+class TreeViewToggleButton(ToggleButton, TreeViewNode):
+    pass
+
+
+def _populate_tree_view(tree_view, parent, text, children):
+    """
+    from http://kivy.org/docs/api-kivy.uix.treeview.html#introduction
+    """
+    if text:
+        tree_node = tree_view.add_node(TreeViewToggleButton(
+            text=text, is_open=False), parent)
+    else:
+        tree_node = parent
+
+    for child in sorted(children.iterkeys()):
+        _populate_tree_view(tree_view, tree_node, child, children[child])
 
 
 class MobileMMAApp(App):
     use_kivy_settings = False
-
-    def __init__(self, *args, **kwargs):
-        App.__init__(self, *args, **kwargs)
-
-        self.mma_library = None
 
     def build_config(self, config):
         config.setdefaults('Library', {
@@ -157,11 +161,7 @@ class MobileMMAApp(App):
 
     def build(self):
         logger.debug("Create Kivy UI")
-        gui = MobileMMAUI()
-        self.mma_library = Library(self.config.get('Library', 'library_path'))
-        self.mma_library.update()
-        return gui
-
+        return MobileMMAUI(self.config.get('Library', 'library_path'))
 
 logging.debug("Module mobilemma imported")
 if __name__ == '__main__':
