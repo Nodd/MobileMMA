@@ -110,3 +110,5 @@ class Library(object):
         logger.info(
             "Library refreshed: %d updated, %d added and %s removed"
             % (updated, added, removed))
+
+logging.debug("Module library imported")

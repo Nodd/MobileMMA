@@ -171,3 +171,5 @@ def pause():
     """
     logger.debug("Pause playing")
     mixer.music.pause()
+
+logging.debug("Module midi imported")

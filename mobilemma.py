@@ -163,5 +163,6 @@ class MobileMMAApp(App):
         return gui
 
 
+logging.debug("Module mobilemma imported")
 if __name__ == '__main__':
     MobileMMAApp().run()
