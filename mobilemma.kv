@@ -59,12 +59,12 @@
                         Button:
                             text: "All"
                             on_press:
-                                for groove in groove_tree.children: groove.state = 'down'
+                                for groove in groove_tree.children: groove.state = 'down'; root.update_tune_list()
 
                         Button:
                             text: "None"
                             on_press:
-                                for groove in groove_tree.children: groove.state = 'normal'
+                                for groove in groove_tree.children: groove.state = 'normal'; root.update_tune_list()
 
                     ScrollView:
                         do_scroll_x: False
@@ -121,4 +121,5 @@
     text_size: self.width - self.padding_x * 2, None
     no_selection: True
     state: 'down'
-    on_state: app.root.toggle_groove(self)
+    on_state: for child in self.nodes: child.state = self.state
+    on_press: app.root.update_tune_list()
