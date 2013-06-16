@@ -55,6 +55,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.treeview import TreeViewNode
 from kivy.uix.listview import ListItemButton
+from kivy.uix.button import Button
 from kivy.adapters.listadapter import ListAdapter
 from kivy.config import ConfigParser
 
@@ -184,6 +185,22 @@ class TreeViewToggleButton(ToggleButton, TreeViewNode):
                 else:
                     self.parent_node.state = "down"
                     self.parent_node.set_parents_state(state)
+
+
+class GrooveSelectAllButton(Button):
+    def on_press(self):
+        for groove in App.get_running_app().root.groove_tree.children:
+            groove.state = 'down'
+            groove.set_childs_state('down')
+        App.get_running_app().root.update_tune_list()
+
+
+class GrooveSelectNoneButton(Button):
+    def on_press(self):
+        for groove in App.get_running_app().root.groove_tree.children:
+            groove.state = 'normal'
+            groove.set_childs_state('normal')
+        App.get_running_app().root.update_tune_list()
 
 
 def _populate_tree_view(tree_view, parent, text, children):

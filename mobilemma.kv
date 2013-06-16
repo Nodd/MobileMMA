@@ -56,15 +56,11 @@
                         size_hint_y: None
                         height: 40
 
-                        Button:
+                        GrooveSelectAllButton:
                             text: "All"
-                            on_press:
-                                for groove in groove_tree.children: groove.state = 'down'; root.update_tune_list()
 
-                        Button:
+                        GrooveSelectNoneButton:
                             text: "None"
-                            on_press:
-                                for groove in groove_tree.children: groove.state = 'normal'; root.update_tune_list()
 
                     ScrollView:
                         do_scroll_x: False
