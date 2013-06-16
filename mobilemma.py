@@ -148,7 +148,42 @@ class MobileMMAUI(Widget):
 
 
 class TreeViewToggleButton(ToggleButton, TreeViewNode):
-    pass
+    def on_press(self):
+        # Apply selection to all childrens (recursively)
+        self.set_childs_state(self.state)
+
+        # Unselect parent if child unselected (recursive)
+        # Select parent if all childs selected (recursive)
+        self.set_parents_state(self.state)
+
+        # Update tune list
+        App.get_running_app().root.update_tune_list()
+
+    def set_childs_state(self, state):
+        u"""Apply state to childrens recursively
+        """
+        for child in self.nodes:
+            child.state = state
+            child.set_childs_state(state)
+
+    def set_parents_state(self, state):
+        u"""Manage the state of the parents.
+
+        Unselect parent if any child unselected (recursive)
+        Select parent if all childs selected (recursive)
+        """
+        if self.parent_node and isinstance(self.parent_node,
+                                           TreeViewToggleButton):
+            if state == "normal":
+                self.parent_node.state = "normal"
+                self.parent_node.set_parents_state(state)
+            else:
+                for child in self.parent_node.nodes:
+                    if child.state == "normal":
+                        break
+                else:
+                    self.parent_node.state = "down"
+                    self.parent_node.set_parents_state(state)
 
 
 def _populate_tree_view(tree_view, parent, text, children):
